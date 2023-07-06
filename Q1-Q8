@@ -1,3 +1,44 @@
+Unit Configuration Calculator
+<style><!--
+    /* CSS styles... */
+  
+--></style>
+<div class="box">
+<h1>Unit Configuration Calculator</h1>
+<div class="input-container"><label for="set-number">Enter the SET number:</label> <input type="text" id="set-number" placeholder="SET-height-install_length-depth-unit_style" /></div>
+<div class="button-container"><button onclick="calculateUnitConfig()">Calculate</button></div>
+<div class="result-container" id="result-container"></div>
+</div>
+<script>// <![CDATA[
+    function calculateUnitConfig() {
+      var setNumber = document.getElementById("set-number").value;
+      var setComponents = setNumber.split("-");
+
+      // Validate the input and handle errors
+      if (setComponents.length !== 5) {
+        document.getElementById("result-container").textContent = "Invalid SET number format.";
+        return;
+      }
+
+      var height = parseInt(setComponents[1]);
+      var installLength = parseInt(setComponents[2]);
+      var depth = parseInt(setComponents[3]);
+      var unitStyle = setComponents[4];
+
+      // Calculate the unit configuration based on the provided values
+      // Replace this with your actual calculation logic
+      var unitConfiguration = "Unit Configuration:\n";
+      unitConfiguration += "Height: " + height + " mm\n";
+      unitConfiguration += "Install Length: " + installLength + " mm\n";
+      unitConfiguration += "Depth: " + depth + " mm\n";
+      unitConfiguration += "Unit Style: " + unitStyle + "\n";
+
+      // Display the calculated unit configuration in the results section
+      document.getElementById("result-container").textContent = unitConfiguration;
+    }
+  
+// ]]></script>
+
 <!DOCTYPE html>
 <html>
 <head>
