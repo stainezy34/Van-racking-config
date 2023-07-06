@@ -3,7 +3,7 @@ import itertools
 def parse_set_number(set_number):
     parts = set_number.split('-')
     if len(parts) != 5:
-        raise ValueError("Invalid SET number format. Please provide in the format SET-h$
+        raise ValueError("Invalid SET number format. Please provide in the format SET-height-width-depth-catch_type.")
 
     height = int(parts[1])
     width = int(parts[2])
@@ -24,23 +24,18 @@ def calculate_install_length(width, install_length):
         '629': 629,
         '900': 900
     }
-    # Generate all possible unit combinations
-    combinations = []
-    for r in range(1, len(width_options) + 1):
-        for combo in itertools.combinations(width_options.values(), r):
-            combinations.append(combo)
-
+    
     # Calculate the unit breakdown options
     unit_breakdown_options = {}
-    for combo in combinations:
-        total_length = sum(combo)
-        units = install_length // total_length
-        remaining_length = install_length % total_length
-        if remaining_length == 0:
-            unit_breakdown_options[combo] = units
+    for r in range(1, min(len(width_options), 2) + 1):
+        for combo in itertools.combinations(width_options.values(), r):
+            total_length = sum(combo)
+            units = install_length // total_length
+            remaining_length = install_length % total_length
+            if remaining_length <= 100:
+                unit_breakdown_options[combo] = units, remaining_length
 
     return unit_breakdown_options
-
 
 
 def print_van_racking_set(set_number):
@@ -55,14 +50,15 @@ def print_van_racking_set(set_number):
     print("Installation Length:", install_length, "mm")
 
     unit_breakdown_options = calculate_install_length(width, install_length)
-      print("Unit Breakdown Options:")
-    for combo, units in unit_breakdown_options.items():
+
+    print("Unit Breakdown Options:")
+    for combo, (units, remaining_length) in unit_breakdown_options.items():
         combo_string = " x ".join(str(option) for option in combo)
         print(combo_string + ":", units, "units")
+        print("Remaining Length:", remaining_length, "mm")
 
 
 if __name__ == "__main__":
     set_number = input("Enter the SET number: ")
     print_van_racking_set(set_number)
-
 
