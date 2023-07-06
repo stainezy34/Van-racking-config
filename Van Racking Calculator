@@ -1,0 +1,60 @@
+import itertools
+
+
+def parse_set_number(set_number):
+    parts = set_number.split('-')
+    if len(parts) != 5:
+        raise ValueError("Invalid SET number format. Please provide in the format SET-height-width-depth-catch_type.")
+    height = int(parts[1])
+    width = int(parts[2])
+    depth = int(parts[3])
+    catch_type = parts[4]
+    return height, width, depth, catch_type
+
+
+def calculate_install_length(width, install_length):
+    width_options = {
+        '429': 429,
+        '474': 474,
+        '500': 500,
+        '529': 529,
+        '600': 600,
+        '629': 629,
+        '900': 900
+    }
+    unit_breakdown_options = {}
+    for r in range(1, min(len(width_options), 2) + 1):
+        for combo in itertools.combinations(width_options.values(), r):
+            total_length = sum(combo)
+            units = install_length // total_length
+            remaining_length = install_length % total_length
+            if remaining_length <= 100:
+                unit_breakdown_options[combo] = units, remaining_length
+    return unit_breakdown_options
+
+
+def format_van_racking_set(set_number):
+    height, width, depth, catch_type = parse_set_number(set_number)
+    install_length = width
+    formatted_output = ""
+    formatted_output += f"Van Racking Set:\n"
+    formatted_output += f"Height: {height} mm\n"
+    formatted_output += f"Width: {width} mm\n"
+    formatted_output += f"Depth: {depth} mm\n"
+    formatted_output += f"Catch Type: {catch_type}\n"
+    formatted_output += f"Installation Length: {install_length} mm\n"
+
+    unit_breakdown_options = calculate_install_length(width, install_length)
+    formatted_output += f"Unit Breakdown Options:\n"
+    for combo, (units, remaining_length) in unit_breakdown_options.items():
+        combo_string = " x ".join(str(option) for option in combo)
+        formatted_output += f"{combo_string}: {units} units\n"
+        formatted_output += f"Remaining Length: {remaining_length} mm\n"
+
+    return formatted_output
+
+
+if __name__ == "__main__":
+    set_number = input("Enter the SET number: ")
+    formatted_output = format_van_racking_set(set_number)
+    print(formatted_output)
